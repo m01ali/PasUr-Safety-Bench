@@ -1,0 +1,129 @@
+# =============================================================================
+# Python
+# =============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+
+# mypy / pyright / ruff caches
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# =============================================================================
+# Secrets & credentials — NEVER commit these
+# =============================================================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.json
+credentials.json
+*_credentials.*
+openai_key.txt
+anthropic_key.txt
+
+# =============================================================================
+# Project-specific: large data & raw outputs
+# =============================================================================
+
+# Raw LLM responses can be hundreds of MB — store externally or use Git LFS
+results/raw_outputs/
+
+# Translated/annotated CSVs may be large; keep seed prompts, ignore derivatives
+data/translated/
+data/annotated/
+
+# Generated charts and result tables (reproducible from scripts)
+results/tables/*.png
+results/tables/*.pdf
+
+# Intermediate cache files from translation/romanization scripts
+*.translation_cache.json
+*.nllb_cache.pkl
+
+# =============================================================================
+# OS
+# =============================================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# =============================================================================
+# IDEs & editors
+# =============================================================================
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+
+# JetBrains (PyCharm, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Vim / Neovim
+*.swp
+*.swo
+*~
+Session.vim
+
+# Emacs
+\#*\#
+.\#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# =============================================================================
+# Logs & temporary files
+# =============================================================================
+*.log
+*.tmp
+*.temp
+*.bak
+*.orig
+logs/
