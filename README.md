@@ -348,7 +348,7 @@ Create a Python environment:
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install pandas matplotlib
+pip install requirements.txt
 ```
 
 If using GPT through the OpenAI API:
