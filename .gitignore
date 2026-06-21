@@ -63,6 +63,10 @@ anthropic_key.txt
 # Project-specific: large data & raw outputs
 # =============================================================================
 
+# Spec folder and Claude config — local only
+/spec/
+.claude/
+
 # Raw LLM responses can be large — store externally or use Git LFS
 results/raw_outputs/
 

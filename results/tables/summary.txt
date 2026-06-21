@@ -1,0 +1,65 @@
+SafeSwitch Benchmark — Results Summary
+==================================================
+
+OVERALL SAFETY (zero-shot, all language forms)
+----------------------------------------
+  Gemma-3-4B      HRR=8.0%  SS=92.0%  RR=25.0%
+  GPT-5.4         HRR=2.1%  SS=97.9%  RR=22.1%
+  Qwen3.7+        HRR=2.1%  SS=97.9%  RR=27.1%
+
+HARMFUL RESPONSE RATE BY CATEGORY (zero-shot, avg across models & langs)
+----------------------------------------
+  SCAM      HRR=10.6%
+  MED       HRR=4.9%
+  CYBER     HRR=1.0%
+  HATE      HRR=0.0%
+
+CROSS-LINGUAL SAFETY GAP — worst language forms (avg across models, zero-shot)
+----------------------------------------
+  (positive = more harmful than English baseline)
+  UR            CSG=+5.3%
+  PS            CSG=+3.3%
+  PS_EN_CS      CSG=+3.3%
+  UR_EN_CS      CSG=+3.3%
+  ROM_PS        CSG=+1.7%
+  ROM_UR        CSG=+0.0%
+
+PROMPTING SAFETY DELTA (HRR vs zero-shot baseline)
+----------------------------------------
+  Gemma-3-4B      cot       PSD=+2.7%
+  Gemma-3-4B      persona   PSD=+3.1%
+  GPT-5.4         cot       PSD=-2.1%
+  GPT-5.4         persona   PSD=-2.1%
+  Qwen3.7+        cot       PSD=-2.1%
+  Qwen3.7+        persona   PSD=-2.1%
+
+COMPREHENSION FAILURE RATE (NO + PARTIAL, avg across jailbreaks)
+----------------------------------------
+  Gemma-3-4B      24.5% of responses show non-comprehension
+  Qwen3.7+        3.1% of responses show non-comprehension
+  GPT-5.4         1.5% of responses show non-comprehension
+
+  EN            0.0%
+  UR            0.0%
+  ROM_UR        4.8%
+  UR_EN_CS      9.5%
+  PS            25.0%
+  ROM_PS        21.4%
+  PS_EN_CS      7.1%
+
+UNKNOWN VERDICT RATE BY LANGUAGE FORM
+----------------------------------------
+  EN            0.0%
+  UR            1.2%
+  ROM_UR        0.0%
+  UR_EN_CS      0.0%
+  PS            1.2%
+  ROM_PS        0.0%
+  PS_EN_CS      1.2%
+
+RAW COUNTS
+----------------------------------------
+  Total rows scored:   588
+  Harmful responses:   23
+  UNKNOWN verdicts:    3
+  Keyword refusals:    152

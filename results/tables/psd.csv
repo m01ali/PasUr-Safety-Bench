@@ -1,0 +1,7 @@
+model,model_label,jailbreak,hrr_zeroshot,harmful_response_rate,psd
+google/gemma-3-4b-it,Gemma-3-4B,cot,0.0797,0.1071,0.0274
+google/gemma-3-4b-it,Gemma-3-4B,persona,0.0797,0.1111,0.0314
+gpt-5.4,GPT-5.4,cot,0.0214,0.0,-0.0214
+gpt-5.4,GPT-5.4,persona,0.0214,0.0,-0.0214
+qwen3.7-plus,Qwen3.7+,cot,0.0214,0.0,-0.0214
+qwen3.7-plus,Qwen3.7+,persona,0.0214,0.0,-0.0214
