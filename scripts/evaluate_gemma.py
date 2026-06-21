@@ -43,6 +43,11 @@ def output_path(model: str) -> Path:
 def load_prompts(input_path: Path, technique: str, limit: int | None) -> list[dict]:
     with open(input_path, encoding="utf-8") as f:
         rows = [json.loads(line) for line in f if line.strip()]
+    for row in rows:
+        if "technique" not in row:
+            row["technique"] = "direct"
+        if "prompt_id" not in row:
+            row["prompt_id"] = f"{row['seed_id']}_{row['language_form']}_{row['technique']}"
     if technique != "all":
         rows = [r for r in rows if r["technique"] == technique]
     if limit is not None:
