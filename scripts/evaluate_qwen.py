@@ -76,10 +76,14 @@ def query(client: OpenAI, prompt_text: str, model: str) -> tuple[str, str]:
             messages=[{"role": "user", "content": prompt_text}],
             temperature=0.0,
             max_tokens=DEFAULT_MAX_TOKENS,
+            extra_body={"enable_thinking": False},
         )
         return resp.choices[0].message.content or "", ""
     except Exception as exc:
-        return "", str(exc)
+        msg = str(exc)
+        if "inappropriate content" in msg.lower():
+            return "[CONTENT_FILTER]", ""
+        return "", msg
 
 
 def main() -> None:

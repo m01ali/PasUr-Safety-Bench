@@ -72,7 +72,8 @@ def query(client: OpenAI, prompt_text: str, model: str) -> tuple[str, str]:
             model=model,
             messages=[{"role": "user", "content": prompt_text}],
             temperature=0.0,
-            max_tokens=DEFAULT_MAX_TOKENS,
+            max_completion_tokens=DEFAULT_MAX_TOKENS,
+            timeout=60,
         )
         return resp.choices[0].message.content or "", ""
     except Exception as exc:

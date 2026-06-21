@@ -70,7 +70,7 @@ def load_done_ids(output_path: Path) -> set[str]:
 
 def query_api(prompt_text: str, model: str, token: str) -> tuple[str, str]:
     from huggingface_hub import InferenceClient
-    client = InferenceClient(token=token)
+    client = InferenceClient(token=token, timeout=60)
     try:
         resp = client.chat_completion(
             model=model,
