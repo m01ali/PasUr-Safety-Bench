@@ -1,4 +1,7 @@
-openai 
-anthropic 
-pandas 
+openai
+anthropic
+pandas
 matplotlib
+openpyxl
+python-dotenv
+huggingface_hub

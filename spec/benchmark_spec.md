@@ -1,8 +1,8 @@
 # SafeSwitch: A Localized Multilingual Safety Benchmark for Urdu and Pashto
 
-**Version:** 0.2 (draft)
+**Version:** 0.3
 **Project:** Apart Global South AI Safety Hackathon
-**Status:** In Progress
+**Status:** Dataset complete — evaluation in progress
 
 ---
 
@@ -151,41 +151,32 @@ The full target can be pursued if time allows after the MVP is complete.
 
 ### 5.2 Prompt Construction Pipeline
 
+**Status: Data collection complete.** All 140 direct prompts are human-written by the team. No machine translation was used. `data/raw/prompts.jsonl` contains the full dataset.
+
+The remaining pipeline step is to build persona variants programmatically:
+
 ```text
-Seed Prompt (EN)
+data/raw/prompts.jsonl (140 rows — direct only)
        │
-       ├──► EN: English baseline
-       │
-       ├──► UR: Urdu script translation or localization
-       │
-       ├──► PS: Pashto script translation or localization
-       │
-       ├──► ROM_UR: Roman Urdu version
-       │
-       ├──► ROM_PS: Roman Pashto version
-       │
-       ├──► UR_EN_CS: Urdu-English code-switching version
-       │
-       └──► PS_EN_CS: Pashto-English code-switching version
+       └──► scripts/build_dataset.py
+                   │
+                   └──► data/prompts.jsonl (280 rows — direct + persona)
 ```
 
-The localized prompts should not rely only on machine translation. They should be reviewed by Urdu/Pashto speakers where possible, especially for Pashto.
+### 5.3 Dataset Schema
 
-### 5.3 Annotation Schema
+The master dataset `data/prompts.jsonl` stores one JSON object per line:
 
-Each prompt in the dataset will be stored as a CSV row with the following fields:
+| Field | Type | Description |
+| --- | --- | --- |
+| `prompt_id` | string | Unique ID, e.g. `MED_001_EN_direct`, `SCAM_003_UR_EN_CS_persona` |
+| `seed_id` | string | Parent seed ID, e.g. `MED_001` |
+| `category` | enum | `MED`, `SCAM`, `HATE`, `CYBER` |
+| `language_form` | enum | `EN`, `UR`, `PS`, `ROM_UR`, `ROM_PS`, `UR_EN_CS`, `PS_EN_CS` |
+| `technique` | enum | `direct`, `persona` |
+| `prompt_text` | string | Full prompt text as sent to the model |
 
-| Field              | Type   | Description                                                          |
-| ------------------ | ------ | -------------------------------------------------------------------- |
-| `prompt_id`        | string | Unique ID, e.g. `MED_001_EN`                                         |
-| `seed_id`          | string | Parent seed prompt ID                                                |
-| `category`         | enum   | `MED`, `SCAM`, `HATE`, `CYBER`                                       |
-| `language_form`    | enum   | `EN`, `UR`, `PS`, `ROM_UR`, `ROM_PS`, `UR_EN_CS`, `PS_EN_CS`         |
-| `prompt_text`      | string | Full prompt text                                                     |
-| `technique`        | enum   | `direct`, `persona`                                                  |
-| `expected_refusal` | bool   | True if a safe model should refuse                                   |
-| `translator_notes` | string | Quality flags or known translation issues                            |
-| `review_status`    | string | `unreviewed`, `machine_translated`, `human_reviewed`, or `needs_fix` |
+All prompts are intended as unsafe requests. `expected_refusal=true` for every row and does not need to be stored. Raw data uses 4 fields (`seed_id`, `category`, `language_form`, `prompt_text`); `prompt_id` and `technique` are assigned by `build_dataset.py`.
 
 ### 5.4 Persona Prompt Template
 
@@ -231,30 +222,17 @@ CoT and self-consistency are not part of the main MVP because they increase scop
 
 ### 7.1 MVP Models
 
-| Model Category                 | Selected Model          | Role                                                      |
-| ------------------------------ | ----------------------- | --------------------------------------------------------- |
-| Frontier / closed-source model | GPT                     | Strong frontier model baseline                            |
-| Open-source multilingual model | Qwen                    | Open-source multilingual baseline                         |
-| Small language model           | One SLM, to be selected | Smaller model baseline under low-resource prompt settings |
+| Model Category | Selected Model | Model ID | Role |
+| --- | --- | --- | --- |
+| Frontier / closed-source | GPT | gpt-4o-mini (or gpt-5.4-mini) | Strong frontier model baseline |
+| Open-source multilingual | Qwen | qwen-plus | Multilingual open-weight baseline |
+| Small language model | Gemma | google/gemma-3-4b-it | SLM baseline under low-resource prompt settings |
 
-The MVP model set is:
+**Pilot status:** A pilot run of 20 prompts (direct technique, GPT) is complete — `results/raw_outputs/gpt_5_4_mini_pilot_20.jsonl`.
 
-* GPT
-* Qwen
-* One selected SLM
+### 7.2 SLM Notes
 
-The exact GPT and Qwen versions will depend on access, cost, and runtime constraints.
-
-### 7.2 SLM Selection Notes
-
-For the SLM, we will prioritize models with at least some Urdu support. Pashto support may be limited in many general-purpose SLMs.
-
-Some models may recognize Pashto script because it overlaps with Urdu or Persian-style scripts, but they may still fail to understand Pashto semantics and local context.
-
-If needed, we will either:
-
-1. choose a Pashto-specific small model if a reliable one is available, or
-2. treat Pashto as a low-resource stress-test setting and clearly discuss this limitation in the final report.
+Gemma 3 4B has been selected as the SLM. It has reasonable multilingual coverage but limited Pashto support. If Pashto comprehension fails for Gemma, we treat these outputs as comprehension failures (UNKNOWN verdicts) rather than safety successes, and discuss the limitation in the report.
 
 ### 7.3 Extension Models
 
@@ -364,30 +342,34 @@ Refusal can be detected by a combination of:
 ## 9. Repository Structure
 
 ```text
-PasUr-Safety-Bench/
+Apart-Global-South/
 ├── README.md
+├── requirements.txt
 ├── spec/
-│   └── benchmark_spec.md
+│   ├── benchmark_spec.md
+│   ├── phase1_dataset.md
+│   ├── phase2_evaluation.md
+│   ├── phase3_scoring.md
+│   ├── phase4_analysis.md
+│   └── phase5_report.md
 ├── data/
-│   ├── seed_prompts/
-│   │   ├── medical_misinformation.csv
-│   │   ├── scam_fraud.csv
-│   │   ├── hate_harassment.csv
-│   │   └── cyber_safety.csv
-│   ├── translated/
-│   │   └── all_prompts_translated.csv
-│   └── annotated/
-│       └── all_prompts_final.csv
+│   ├── raw/
+│   │   └── prompts.jsonl          ← 140 rows, human-written, DONE
+│   └── prompts.jsonl              ← 280 rows (direct + persona), TO BUILD
 ├── scripts/
-│   ├── translate.py
-│   ├── romanize.py
-│   ├── code_switch.py
-│   ├── evaluate.py
-│   ├── judge.py
-│   └── analyze.py
+│   ├── xlsx_to_jsonl.py           ← converts Excel to JSONL (done)
+│   ├── build_dataset.py           ← builds persona variants (to write)
+│   ├── evaluate.py                ← queries models (needs JSONL update)
+│   ├── judge.py                   ← LLM-as-judge scoring (needs JSONL + UNKNOWN fix)
+│   └── analyze.py                 ← metrics and charts (needs JSONL input fix)
 ├── results/
 │   ├── raw_outputs/
-│   └── tables/
+│   │   ├── gpt_5_4_mini_pilot_20.jsonl   ← pilot (20 rows), DONE
+│   │   ├── gpt.jsonl                     ← full GPT run, TO RUN
+│   │   ├── qwen.jsonl                    ← TO RUN
+│   │   └── gemma.jsonl                   ← TO RUN
+│   ├── scored.jsonl               ← 840 scored rows, TO PRODUCE
+│   └── tables/                    ← CSVs and PNGs, TO PRODUCE
 ├── docs/
 │   └── related_work.md
 └── report/
@@ -490,4 +472,4 @@ Any harmful examples should be handled carefully, stored responsibly, and used o
 
 ---
 
-*Document last updated: 2026-06-19*
+*Document last updated: 2026-06-21*

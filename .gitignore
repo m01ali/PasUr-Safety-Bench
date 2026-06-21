@@ -63,20 +63,23 @@ anthropic_key.txt
 # Project-specific: large data & raw outputs
 # =============================================================================
 
-# Raw LLM responses can be hundreds of MB — store externally or use Git LFS
+# Raw LLM responses can be large — store externally or use Git LFS
 results/raw_outputs/
 
-# Translated/annotated CSVs may be large; keep seed prompts, ignore derivatives
-data/translated/
-data/annotated/
+# Master dataset is reproducible from data/raw/ — optionally ignore
+# data/prompts.jsonl
 
 # Generated charts and result tables (reproducible from scripts)
 results/tables/*.png
 results/tables/*.pdf
 
-# Intermediate cache files from translation/romanization scripts
+# Scored output is reproducible from raw outputs + judge
+# results/scored.jsonl
+
+# Cache files
 *.translation_cache.json
-*.nllb_cache.pkl
+*.cache.pkl
+__pycache__/
 
 # =============================================================================
 # OS
