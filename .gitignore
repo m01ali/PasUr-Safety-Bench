@@ -135,3 +135,4 @@ Session.vim
 *.orig
 logs/
 report/
+docs/
